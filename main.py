@@ -1,6 +1,5 @@
-from controller.controller import Controller
-from model.model import Model
-from pynput import keyboard
+from controller import Controller
+from model import Model
 
 
 def main():

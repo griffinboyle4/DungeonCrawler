@@ -1,2 +1,2 @@
-# IsleOfShoals
-Isle of Shoals: an ASCII-Animated Adventure Game
+# DungeonCrawler
+Dungeon Crawler: an ASCII-Animated Dungeon Game

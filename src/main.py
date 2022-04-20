@@ -3,6 +3,9 @@ from model import Model
 
 
 def main():
+    """Run to play Dungeon Crawler.
+    :return: None
+    """
     model = Model()
     cont = Controller(model)
     cont.go()

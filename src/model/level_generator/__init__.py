@@ -1,5 +1,5 @@
 from math import sqrt
-from random import randrange, shuffle
+from random import randrange
 
 import numpy as np
 
@@ -26,11 +26,21 @@ MAX_ROOM_HEIGHT = 15
 
 
 def init_level():
+    """Returns an all-wall 2-D level data array (All 0s)
+    with reduced shape to allow for border addition.
+    :return: an all-wall 2-D level data array (All 0s)
+    """
     return np.zeros((LEVEL_HEIGHT - 2, LEVEL_WIDTH - 2), dtype=np.int8)
 
 
 def init_rooms(level_map):
-    rooms = list()
+    """Generates a list of Rooms with random position, width, and length,
+    all of which lie within level boundaries and don't overlap each other.
+    Each room is inserted/reflected into the level map, and the list of rooms is returned
+    :param level_map: the level data, in which to insert rooms
+    :return: the list of rooms
+    """
+    rooms = []
     num_rooms = randrange(MIN_NUM_ROOMS, MAX_NUM_ROOMS)
 
     for i in range(MIN_NUM_ROOMS):
@@ -55,6 +65,11 @@ def init_rooms(level_map):
 
 
 def connect_rooms(rooms, level_map):
+    """Connects Rooms in level_map with paths, ensuring no unreachable Rooms.
+    :param rooms: the list of rooms
+    :param level_map: the level_data with isolated rooms
+    :return: None
+    """
     for i in range(len(rooms) - 1):
         room_a = rooms[i]
         room_b = rooms[i + 1]
@@ -62,11 +77,23 @@ def connect_rooms(rooms, level_map):
         level_map[rows, cols] = 1
 
 
-def add_boarder_wall(level_map: np.array):
+def add_boarder_wall(level_map: np.ndarray):
+    """Pads the given level map on all sides with walls,
+    restricting movement to within level_map alone.
+    :param level_map: the level data with connected rooms
+    :return: the given level map with walls on all sides
+    """
     return np.pad(level_map, pad_width=1, mode='constant', constant_values=0)
 
 
-def add_door(level_map: np.array, rooms: list):
+def add_door(level_map: np.ndarray, rooms: list):
+    """Determines the door position from Room closest to origin,
+    creates path in Room to door, inserts door into level data,
+    and returns the position of the door.
+    :param level_map: the level data with walls and connected rooms
+    :param rooms: the list of rooms
+    :return: the position of the door
+    """
     highest_room = rooms[0]
     door_room_sentinel = Room(Position(highest_room.get_center_position().get_x(), 1), width=0, height=0)
     cols, rows = zip(*highest_room.get_path_indices_to(door_room_sentinel))
@@ -79,6 +106,10 @@ def add_door(level_map: np.array, rooms: list):
 
 
 def get_random_point_in_room(room: Room):
+    """Returns a random Position within the given Room.
+    :param room: the Room in which the point will reside
+    :return: a random Position within the given Room.
+    """
     offset = Position(randrange(room.get_width() // -2, room.get_width() // 2),
                       randrange(room.get_height() // -2, room.get_height() // 2))
 
@@ -86,6 +117,13 @@ def get_random_point_in_room(room: Room):
 
 
 def generate_mobs(rooms: list, level):
+    """Generates a level-influenced randomized distribution
+    of mobs with the given list of Rooms, and returns a dictionary
+    mapping each Mob's id to its respective Mob.
+    :param rooms: the list of rooms in which to spawn Mobs
+    :param level: the current level, used to determine difficulty
+    :return: a dictionary mapping each Mob's id to its respective Mob
+    """
     other_rooms = rooms[0:len(rooms) - 1]
 
     mobs = dict()
@@ -98,6 +136,13 @@ def generate_mobs(rooms: list, level):
 
 
 def generate_hearts(rooms: list, level):
+    """Generates a level-influenced randomized distribution
+    of hearts with the given list of Rooms, and returns a set
+    containing each heart's position.
+    :param rooms: the list of rooms in which to place hearts
+    :param level: the current level, used to determine difficulty
+    :return: a set containing each heart's position.
+    """
     hearts = set()
 
     for room in rooms:
@@ -109,6 +154,15 @@ def generate_hearts(rooms: list, level):
 
 
 def generate_level(level=0, player=None):
+    """Procedurally generates a Game Grid from the given level and player.
+    If level is not specified, the default level is 0. If player
+    is not specified, the defualt value is a Player with 10 Health,
+    position spawn, and weapon fist. Spawn is determined as the center
+    position of the last element of the sorted room array.
+    :param level: the level to generate
+    :param player: the player to place in Game Grid
+    :return: a procedurally generated Game Grid
+    """
     level_map = init_level()
     rooms = init_rooms(level_map)
     rooms.sort()

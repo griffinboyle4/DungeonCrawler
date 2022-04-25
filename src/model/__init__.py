@@ -2,14 +2,14 @@ from model.living_entity.weapon.fist import Fist
 from model.direction import Direction
 from model.game_state import GameState
 from model.level_generator import generate_level
-from model.menu import MainMenu, PauseMenu, LoadMenu, SettingsMenu
+from model.menu import MainMenu, PauseMenu, LoadMenu, DeathMenu
 from dill import dump, load
 
 
 class Model:
     """This class represents a model in Dungeon Crawler"""
     def __init__(self, game_grid=generate_level(), current_game_state=GameState.MAIN_MENU):
-        """Contructs a new model from the given Game Grid and Game State. If
+        """Constructs a new model from the given Game Grid and Game State. If
         no Game Grid is provided, the a Game Grid is generated at level 0.
         If no Game State is provided, the Game State defaults to Main Menu.
         :param game_grid: the Game Grid from which the model is constructed
@@ -21,12 +21,12 @@ class Model:
         self._main_menu = MainMenu()
         self._pause_menu = PauseMenu()
         self._load_menu = LoadMenu()
-        self._settings_menu = SettingsMenu()
+        self._death_menu = DeathMenu()
         self._game_states = {GameState.MAIN_MENU: self.get_main_menu,
                              GameState.PAUSE_MENU: self.get_pause_menu,
                              GameState.LOAD_MENU: self.get_load_menu,
                              GameState.IN_GAME: self.get_game_grid,
-                             GameState.SETTINGS_MENU: self.get_settings_menu}
+                             GameState.DEATH_MENU: self.get_death_menu}
         self._menu_operations = {"load": self.set_game_state_load_menu,
                                  "exit": self.set_game_state_exit,
                                  "slot1": self.load_save_1,
@@ -34,7 +34,9 @@ class Model:
                                  "slot3": self.load_save_3,
                                  "resume": self.set_game_state_in_game,
                                  "save": self.save_game,
-                                 "quit": self.set_game_state_main_menu}
+                                 "quit": self.set_game_state_main_menu,
+                                 "new_game": self.new_game,
+                                 "main_menu": self.set_game_state_main_menu}
 
     def get_main_menu(self):
         """Retrieves the Main Menu Game State.
@@ -53,6 +55,12 @@ class Model:
         :return: the Load Menu Game State
         """
         return self._load_menu
+
+    def get_death_menu(self):
+        """Retrieves the Death Menu Game State
+        :return: the Death Menu Game State
+        """
+        return self._death_menu
 
     def get_game_grid(self):
         """Retrieves the Game Grid Game State.
@@ -135,18 +143,6 @@ class Model:
         :return: None
         """
         self.set_game_state(GameState.PAUSE_MENU)
-
-    def set_game_state_settings_menu(self):
-        """Sets the Game State to Settings Menu.
-        :return: None
-        """
-        self.set_game_state(GameState.SETTINGS_MENU)
-
-    def get_settings_menu(self):
-        """Retrieves the Settings Menu Game State.
-        :return: the Settings Menu Game State
-        """
-        return self._settings_menu
 
     def get_position(self):
         """Retrieves the current player position.
@@ -298,8 +294,26 @@ class Model:
         self.set_game_state(GameState.IN_GAME)
         self.request_update()
 
+    def new_game(self):
+        """Starts a new game in the current slot.
+        :return: None
+        """
+        if self._save_slot == 1:
+            self.load_save_1()
+        elif self._save_slot == 2:
+            self.load_save_2()
+        elif self._save_slot == 3:
+            self.load_save_3()
+        else:
+            raise NotImplementedError()
+
     def request_update(self):
         """Sets update flag in current Game State to True.
         :return: None
         """
         self.get_current_game_state().set_need_update()
+
+    def end_game_if_player_dies(self):
+        if self._game_grid.is_player_dead():
+            self._load_menu.delete_save()
+            self.set_game_state(GameState.DEATH_MENU)

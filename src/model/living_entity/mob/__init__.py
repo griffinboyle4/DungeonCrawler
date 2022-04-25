@@ -15,10 +15,10 @@ class Mob(LivingEntity, ABC):
     def __init__(self, symbol, health, position, facing, weapon):
         """Constructs a Mob with the given symbol, health,
         position, facing direction, and weapon. If symbol is
-        not specified, the defualt symbol is '&'. If health is
+        not specified, the default symbol is '&'. If health is
         is not specified, the default health is given by the the
         constant INITIAL_HEALTH. If facing is not specified, the
-        defualt direction is LEFT. If weapon is not specified,
+        default direction is LEFT. If weapon is not specified,
         the default weapon is a first.
         :param symbol: the string representation of the Mob
         :param health: the initial health of the Mob
@@ -56,9 +56,8 @@ class Rat(Mob):
     """This class represents a Rat Mob in Dungeon Crawler"""
     def __init__(self, position, facing=Direction.LEFT):
         """Constructs a Rat with the given position and facing direction.
-        If facing is not specified, the defualt direction is left.
+        If facing is not specified, the default direction is left.
         :param position: the initial position of the Rat
-        :param facing: the inital facing direction of the Rat
+        :param facing: the initial facing direction of the Rat
         """
         super().__init__(symbol='@', health=4, position=position, facing=facing, weapon=Fist())
-

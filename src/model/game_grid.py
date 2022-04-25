@@ -233,7 +233,7 @@ class GameGrid:
             self.set_need_update()
 
     def get_fov(self) -> (int, int, int, int):
-        """Returns the FOV indicies as a size-4 tuple of boundaries.
+        """Returns the FOV indices as a size-4 tuple of boundaries.
         :return: a size-4 tuple of form (upper, lower, left, right)
         """
         pos = self.get_position()
@@ -296,6 +296,12 @@ class GameGrid:
                     self.move_left(mob)
                 if mob.get_x() < self.get_x():
                     self.move_right(mob)
+        if abs(mob.get_position() - self.get_position()) == Position(1, 1):
+            if mob.get_x() < self.get_x():
+                self.move_right(mob)
+            else:
+                self.move_left(mob)
+
         if mob.get_position().distance_to(self.get_position()) == 1:
             if mob.get_weapon_position() == self.get_position():
                 self._player.take_damage(mob.get_attack())
@@ -378,3 +384,9 @@ class GameGrid:
         :return: None
         """
         self._update_flag = True
+
+    def is_player_dead(self):
+        """Checks if player is dead.
+        :return: True if player is dead, else False
+        """
+        return self._player.get_health()[0] <= 0

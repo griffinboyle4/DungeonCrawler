@@ -3,7 +3,7 @@ from random import randrange
 
 import numpy as np
 
-from model import Fist
+from model.living_entity.weapon.sword import Sword
 from model.game_grid import GameGrid
 from model.level_generator.room import Room
 from model.living_entity.mob import Rat
@@ -110,8 +110,8 @@ def get_random_point_in_room(room: Room):
     :param room: the Room in which the point will reside
     :return: a random Position within the given Room.
     """
-    offset = Position(randrange(room.get_width() // -2, room.get_width() // 2),
-                      randrange(room.get_height() // -2, room.get_height() // 2))
+    offset = Position(randrange((room.get_width() - 4) // -2, (room.get_width() - 4) // 2),
+                      randrange((room.get_height() - 4) // -2, (room.get_height() - 4) // 2))
 
     return room.get_center_position() + offset
 
@@ -173,7 +173,7 @@ def generate_level(level=0, player=None):
     hearts = generate_hearts(rooms, level=level)
     door_pos = add_door(level_map, rooms)
     if player is None:
-        player = Player(health=30, position=spawn, weapon=Fist())
+        player = Player(health=20, position=spawn, weapon=Sword())
     else:
         player.set_position(spawn)
 

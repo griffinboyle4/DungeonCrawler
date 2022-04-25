@@ -17,26 +17,23 @@ class View:
         """
         if self._model.get_game_state() == GameState.IN_GAME:
             if self._model.get_current_game_state().need_update():
-                hud = "\n\tHealth: " + health_to_string(self._model.get_player_health()) + "\t"
+                hud = "\n\n\n\t\tHealth: " + health_to_string(self._model.get_player_health()) + "\t"
 
                 if self._model.get_current_enemy_symbol() is not None:
                     hud += self._model.get_current_enemy_symbol() + ": "
-                    hud += health_to_string(self._model.get_current_enemy_health())
+                    hud += health_to_string(self._model.get_current_enemy_health()) + "\t"
                 else:
-                    hud += "\t\t"
+                    hud += "\t"
 
-                hud += "\tLevel: " + str(self._model.get_current_level())
+                hud += "\tLevel: " + str(self._model.get_current_level() + 1)
 
-                os.system('clear')
-
-                print("\n\n\t" + '\n\t'.join([''.join(row)
+                print("\n\n\n\t\t" + '\n\t\t'.join([''.join(row)
                                               for row
                                               in self._model.data_grid_to_ascii()]) + hud)
         elif self._model.get_game_state() != GameState.EXIT:
             if self._model.get_current_game_state().need_update():
-                os.system('clear')
-
-                print("\n\n\t" + '\n\t'.join([''.join(row)
+                os.system("clear")
+                print("\n\n\n\t\t" + '\n\t\t'.join([''.join(row)
                                               for row
                                               in self._model.get_current_game_state().get_full_background()]))
 

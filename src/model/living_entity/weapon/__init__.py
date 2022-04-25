@@ -6,7 +6,7 @@ from model.direction import Direction
 
 class Weapon(ABC):
     """This abstract class represents a Weapon in Dungeon Crawler"""
-    mob_id = itertools.count(7, 2)
+    weapon_id = itertools.count(7, 2)
 
     def __init__(self, attack: int,
                  left_symbol: str,
@@ -29,7 +29,7 @@ class Weapon(ABC):
                         Direction.UP: up_symbol,
                         Direction.RIGHT: right_symbol,
                         Direction.DOWN: down_symbol}
-        self._weapon_id = next(Weapon.mob_id)
+        self._weapon_id = next(Weapon.weapon_id)
 
     def get_attack(self):
         """Returns the amount of damage dealt by the weapon.

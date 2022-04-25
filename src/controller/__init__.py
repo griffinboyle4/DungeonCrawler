@@ -28,8 +28,7 @@ class Controller:
                             Key.esc: self._model.set_game_state_pause_menu}
         _main_menu_key_map = {KeyCode.from_char('w'): self._model.get_game_state_at(GameState.MAIN_MENU).move_up,
                               KeyCode.from_char('s'): self._model.get_game_state_at(GameState.MAIN_MENU).move_down,
-                              Key.space: self._model.choose,
-                              Key.shift: self._model.set_game_state_settings_menu}
+                              Key.space: self._model.choose}
         _load_menu_key_map = {KeyCode.from_char('w'): self._model.get_game_state_at(GameState.LOAD_MENU).move_up,
                               KeyCode.from_char('s'): self._model.get_game_state_at(GameState.LOAD_MENU).move_down,
                               KeyCode.from_char('c'): self._model.get_game_state_at(GameState.LOAD_MENU).delete_save,
@@ -39,11 +38,15 @@ class Controller:
                                KeyCode.from_char('s'): self._model.get_game_state_at(GameState.PAUSE_MENU).move_down,
                                Key.space: self._model.choose,
                                Key.esc: self._model.set_game_state_in_game}
+        _death_menu_key_map = {KeyCode.from_char('w'): self._model.get_game_state_at(GameState.DEATH_MENU).move_up,
+                               KeyCode.from_char('s'): self._model.get_game_state_at(GameState.DEATH_MENU).move_down,
+                               Key.space: self._model.choose}
 
         self._key_map = {GameState.MAIN_MENU: _main_menu_key_map,
                          GameState.PAUSE_MENU: _pause_menu_key_map,
                          GameState.LOAD_MENU: _load_menu_key_map,
-                         GameState.IN_GAME: _in_game_key_map}
+                         GameState.IN_GAME: _in_game_key_map,
+                         GameState.DEATH_MENU: _death_menu_key_map}
 
     def get_game_state(self):
         """Retrieves the current Game State type.
@@ -70,6 +73,9 @@ class Controller:
         :return: None
         """
         self._model.update_mobs()
+        if self.get_game_state() == GameState.IN_GAME:
+            self._model.end_game_if_player_dies()
+
         self._view.display()
 
         if self.get_game_state() == GameState.EXIT:

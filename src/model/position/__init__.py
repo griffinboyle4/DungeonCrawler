@@ -73,6 +73,12 @@ class Position:
         """
         return "(" + str(self._x) + ", " + str(self._y) + ")"
 
+    def __abs__(self):
+        """Returns the absolute value of the position.
+        :return: the absolute value of the position
+        """
+        return Position(abs(self._x), abs(self._y))
+
     def move_left(self):
         """Moves the position to left by 1.
         :return: None

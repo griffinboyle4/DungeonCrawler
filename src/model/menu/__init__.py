@@ -9,6 +9,7 @@ import os.path
 
 class Menu(ABC):
     """This abstract class represents a Menu."""
+
     def __init__(self, background: np, options: tuple):
         """Constructs a menu with the given background and options.
         :param background: the menu background
@@ -170,18 +171,12 @@ class PauseMenu(Menu):
         super().__init__(background=PauseMenu.background, options=(resume, save, quit_option))
 
 
-class SettingsMenu(Menu):
-    """This class represents the Settings Menu"""
-    background = np.loadtxt("model/menu/settings_menu.txt", dtype='<U1')
+class DeathMenu(Menu):
+    """This class represents the Death Menu"""
+    background = np.loadtxt("model/menu/death_menu.txt", dtype='<U1')
 
     def __init__(self):
-        """Constructs a Settings Menu"""
-        width = Option("width", Position(67, 17), Position(83, 17))
-        height = Option("height", Position(66, 22), Position(84, 22))
-        super().__init__(background=SettingsMenu.background, options=(width, height))
-
-    def get_full_background(self):
-        """Returns the menu background with selection cursors and width and height values.
-        :return: the menu background with selection cursors and width and height values
-        """
-        raise NotImplemented()
+        """Constructs a Death Menu"""
+        new_game = Option("new_game", Position(62, 17), Position(88, 17))
+        main_menu = Option("main_menu", Position(62, 22), Position(90, 22))
+        super().__init__(background=DeathMenu.background, options=(new_game, main_menu))

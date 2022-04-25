@@ -1,6 +1,6 @@
 from model.direction import Direction
 from model.living_entity import LivingEntity
-from model.living_entity.weapon.fist import Fist
+from model.living_entity.weapon.sword import Sword
 from model.position import Position
 
 INITIAL_HEALTH = 10
@@ -8,11 +8,11 @@ INITIAL_HEALTH = 10
 
 class Player(LivingEntity):
     """This class represents a Player in Dungeon Crawler"""
-    def __init__(self, symbol='&',
+    def __init__(self, symbol='𓀠',
                  health=INITIAL_HEALTH,
                  position=Position(0, 0),
                  facing=Direction.LEFT,
-                 weapon=Fist()):
+                 weapon=Sword()):
         """Constructs a Player with the given symbol, health,
         position, facing direction, and weapon. If symbol is
         not specified, the defualt symbol is '&'. If health is

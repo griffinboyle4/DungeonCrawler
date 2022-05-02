@@ -3,7 +3,7 @@ from math import sqrt
 
 class Position:
     """Represents a position on 2-D Grid"""
-    def __init__(self, x, y):
+    def __init__(self, x: int, y: int):
         """Constructs a Position with the given x and y coordinates.
         :param x: the x-coordinate of the position
         :param y: the y-coordinate of the position
@@ -66,12 +66,6 @@ class Position:
             return self.distance_from_origin() < other.distance_from_origin()
         else:
             raise TypeError("Cannot compare type Position to type " + str(type(other)))
-
-    def __str__(self):
-        """Returns the position as a readable string.
-        :return: the position as a readable string
-        """
-        return "(" + str(self._x) + ", " + str(self._y) + ")"
 
     def __abs__(self):
         """Returns the absolute value of the position.

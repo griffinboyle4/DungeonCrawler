@@ -314,6 +314,10 @@ class Model:
         self.get_current_game_state().set_need_update()
 
     def end_game_if_player_dies(self):
+        """Deletes save and sets Game State to Death Menu
+        if player is dead.
+        :return: None
+        """
         if self._game_grid.is_player_dead():
             self._load_menu.delete_save()
             self.set_game_state(GameState.DEATH_MENU)

@@ -49,3 +49,9 @@ class Weapon(ABC):
         :return: the orientation-specific string representation of the weapon
         """
         return self._symbol.get(facing)
+
+    def get_weapon_id(self):
+        """Returns the weapon's weapon id.
+        :return: the weapon's weapon id
+        """
+        return self._weapon_id
